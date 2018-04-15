@@ -1,5 +1,5 @@
 $(document).ready(() => {
 
-    alert(Welcome to Node.js!);
+    alert('Welcome to Node.js!');
 
 });
