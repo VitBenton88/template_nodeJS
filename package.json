@@ -1,0 +1,36 @@
+{
+  "name": "template_nodeJS",
+  "version": "1.0.0",
+  "description": "Basic Node.JS base template - Bootstrap, cssUA, Express, Gulp, jQuery, Sass",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "compression": "^1.7.2",
+    "express": "^4.16.3",
+    "nodemon": "^1.17.2",
+    "npm": "^5.8.0",
+    "update": "^0.7.4"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^4.1.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-livereload": "^3.8.1",
+    "gulp-sass": "^3.2.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "^3.0.0",
+    "gulp-uglify-es": "^1.0.1",
+    "pump": "^3.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "postinstall": "gulp production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VitBenton88/template_nodeJS.git"
+  },
+  "author": "Vit Benton",
+  "license": "ISC"
+}
