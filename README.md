@@ -12,14 +12,14 @@ Base Template for a Node.JS project.
 
 ### Dev Dependencies used:
 * Gulp.JS v3
- ### Using the following Gulp Modules
- * autoprefixer = require('gulp-autoprefixer');
- * concat = require('gulp-concat');
- * livereload = require('gulp-livereload');
- * pump = require('pump');
- * sass = require('gulp-sass');
- * sourcemaps = require('gulp-sourcemaps');
- * uglify = require('gulp-uglify');
+ ### ... using the following Gulp Modules
+ * autoprefixer
+ * concat
+ * livereload
+ * pump
+ * sass
+ * sourcemaps
+ * uglify
  * uglifyjs = require('gulp-uglify-es').default;
 
 ### Libraries used:
