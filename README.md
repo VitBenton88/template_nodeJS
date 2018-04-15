@@ -22,7 +22,7 @@ Base Template for a Node.JS project.
  * uglify
  * uglifyjs = require('gulp-uglify-es').default;
 
-### Libraries used:
+### Libraries included:
 * Bootstrap v4 (Only grid system and flex utilities)
 * cssUA
 * jQuery v3.3.1
