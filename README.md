@@ -27,3 +27,6 @@ Base Template for a Node.JS project.
 * cssUA
 * jQuery v3.3.1
 
+### IMPORTANT:
+* Sass is compiled into CSS using Gulp.js
+* A 'postinstall' script is used in the package.json to build assets on production

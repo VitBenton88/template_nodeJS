@@ -11,7 +11,8 @@ const livereload = require('gulp-livereload');
 
 //paths
 const paths = {
-  libSrc: 'src/libs/**/*.js',
+  cssLibSrc: 'src/libs/**/*.css',
+  jsLibSrc: 'src/libs/**/*.js',
   root: '/',
   src: 'public/assets',
   scripts: 'src/js/*.js',
@@ -21,10 +22,23 @@ const paths = {
 
 // DEVELOPMENT gulp.tasks
 
-// combine js libraries - DEVELOPMENT
-gulp.task('libraries-development', (cb) => {
+// combine css libraries - DEVELOPMENT
+gulp.task('libraries-css-development', (cb) => {
   pump([
-      gulp.src(paths.libSrc),
+      gulp.src(paths.cssLibSrc),
+      sourcemaps.init(),
+      concat('lib.min.css'),
+      sourcemaps.write(paths.root),
+      gulp.dest(paths.src)
+    ],
+    cb
+  );
+});
+
+// combine js libraries - DEVELOPMENT
+gulp.task('libraries-js-development', (cb) => {
+  pump([
+      gulp.src(paths.jsLibSrc),
       sourcemaps.init(),
       concat('lib.min.js'),
       sourcemaps.write(paths.root),
@@ -60,10 +74,21 @@ gulp.task('sass-development', () => {
 
 // PRODUCTION gulp.tasks
 
-// combine js libraries - PRODUCTION
-gulp.task('libraries-production', (cb) => {
+// combine css libraries - PRODUCTION
+gulp.task('libraries-css-production', (cb) => {
   pump([
-      gulp.src(paths.libSrc),
+      gulp.src(paths.cssLibSrc),
+      concat('lib.min.css'),
+      gulp.dest(paths.src)
+    ],
+    cb
+  );
+});
+
+// combine js libraries - PRODUCTION
+gulp.task('libraries-js-production', (cb) => {
+  pump([
+      gulp.src(paths.jsLibSrc),
       concat('lib.min.js'),
       gulp.dest(paths.src)
     ],
@@ -105,7 +130,7 @@ gulp.task('watch', () => {
 });
 
 //define default gulp task
-gulp.task('default', ['libraries-development', 'scripts-development', 'sass-development']);
+gulp.task('default', ['libraries-css-development', 'libraries-js-development', 'scripts-development', 'sass-development']);
 
 //define default gulp task
-gulp.task('production', ['libraries-production', 'scripts-production', 'sass-production']);
+gulp.task('production', ['libraries-css-production', 'libraries-js-production', 'libraries-production', 'scripts-production', 'sass-production']);
