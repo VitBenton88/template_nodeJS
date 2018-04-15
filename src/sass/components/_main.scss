@@ -1,9 +1,19 @@
 body {
+    background: $white;
     text-align: center;
+    transition: background 0.5s ease;
+
+    &.nodeGreen {
+        background: $nodeGreen;
+    }
 }
 
-h1, p {
+h1, h3 {
     margin: 0 auto;
+}
+
+h3 {
+    color: $white;
 }
 
 .node-logo {
