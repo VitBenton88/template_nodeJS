@@ -1,12 +1,11 @@
 /* CORE */
-@import "core/browsers";
 @import "core/colors";
 @import "core/fonts";
 @import "core/grid";
 @import "core/typography";
 
-/* BROWSERS */
-@import "browsers/chrome";
-
 /* COMPONENTS */
 @import "components/main";
+
+/* BROWSERS */
+@import "browsers/chrome";
