@@ -20,10 +20,10 @@ Base Template for a Node.JS project.
  * sass
  * sourcemaps
  * uglify
- * uglifyjs = require('gulp-uglify-es').default;
+ * uglifyjs
 
 ### Libraries included:
-* Bootstrap v4 (Only grid system and flex utilities)
+* Bootstrap v4.1.0 (Only grid system and flex utilities)
 * cssUA
 * jQuery v3.3.1
 
