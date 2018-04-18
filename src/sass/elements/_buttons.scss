@@ -1,0 +1,9 @@
+/* Regular Buttons */
+.button, input[type="button"], input[type="submit"] {
+    user-select: none;
+}
+
+    input[type="button"], input[type="submit"] {
+        appearance: none !important;
+        border: 0;
+    }
