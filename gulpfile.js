@@ -55,8 +55,7 @@ gulp.task('scripts-development', (cb) => {
       sourcemaps.init(),
       concat('all.min.js'),
       sourcemaps.write(paths.root),
-      gulp.dest(paths.src),
-      livereload()
+      gulp.dest(paths.src)
     ],
     cb
   );
