@@ -134,4 +134,4 @@ gulp.task('watch', () => {
 gulp.task('default', ['libraries-css-development', 'libraries-js-development', 'scripts-development', 'sass-development']);
 
 //define default gulp task
-gulp.task('production', ['libraries-css-production', 'libraries-js-production', 'libraries-production', 'scripts-production', 'sass-production']);
+gulp.task('production', ['libraries-css-production', 'libraries-js-production', 'scripts-production', 'sass-production']);
