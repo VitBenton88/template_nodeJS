@@ -23,46 +23,46 @@ const paths = {
 //// DEVELOPMENT gulp.tasks ////
 
 // combine css libraries - DEVELOPMENT
-gulp.task('libraries-css-development', (cb) => {
+function librariesCssDevelopment(cb) {
   pump([
-      gulp.src(paths.cssLibSrc),
-      sourcemaps.init(),
-      concat('lib.min.css'),
-      sourcemaps.write(paths.root),
-      gulp.dest(paths.src)
-    ],
-    cb
+    gulp.src(paths.jsLibSrc),
+    sourcemaps.init(),
+    concat('lib.min.js'),
+    sourcemaps.write(paths.root),
+    gulp.dest(paths.src)
+  ],
+  cb()
   );
-});
+}
 
 // combine js libraries - DEVELOPMENT
-gulp.task('libraries-js-development', (cb) => {
+function librariesJsDevelopment(cb) {
   pump([
-      gulp.src(paths.jsLibSrc),
-      sourcemaps.init(),
-      concat('lib.min.js'),
-      sourcemaps.write(paths.root),
-      gulp.dest(paths.src)
-    ],
-    cb
+    gulp.src(paths.jsLibSrc),
+    sourcemaps.init(),
+    concat('lib.min.js'),
+    sourcemaps.write(paths.root),
+    gulp.dest(paths.src)
+  ],
+  cb()
   );
-});
+}
 
 // concat custom js - DEVELOPMENT
-gulp.task('scripts-development', (cb) => {
+function scriptsDevelopment(cb) {
   pump([
-      gulp.src(paths.scripts),
-      sourcemaps.init(),
-      concat('all.min.js'),
-      sourcemaps.write(paths.root),
-      gulp.dest(paths.src)
-    ],
-    cb
+    gulp.src(paths.scripts),
+    sourcemaps.init(),
+    concat('all.min.js'),
+    sourcemaps.write(paths.root),
+    gulp.dest(paths.src)
+  ],
+  cb
   );
-});
+}
 
 //compile sass - DEVELOPMENT
-gulp.task('sass-development', () => {
+function sassDevelopment(cb) {
   gulp.src(paths.sassSrc)
     .pipe(sourcemaps.init())
     .pipe(autoprefixer())
@@ -71,46 +71,47 @@ gulp.task('sass-development', () => {
     .pipe(sourcemaps.write(paths.root))
     .pipe(gulp.dest(paths.src))
     .pipe(livereload());
-});
+  cb();
+}
 
-//// PRODUCTION gulp.tasks/ ///
+//// PRODUCTION gulp.tasks/ ////
 
 // combine css libraries - PRODUCTION
-gulp.task('libraries-css-production', (cb) => {
+function librariesCssProduction(cb) {
   pump([
-      gulp.src(paths.cssLibSrc),
-      concat('lib.min.css'),
-      gulp.dest(paths.src)
-    ],
-    cb
-  );
-});
+    gulp.src(paths.cssLibSrc),
+    concat('lib.min.css'),
+    gulp.dest(paths.src)
+  ],
+  cb
+);
+}
 
 // combine js libraries - PRODUCTION
-gulp.task('libraries-js-production', (cb) => {
+function librariesJsProduction(cb) {
   pump([
-      gulp.src(paths.jsLibSrc),
-      concat('lib.min.js'),
-      gulp.dest(paths.src)
-    ],
-    cb
-  );
-});
+    gulp.src(paths.jsLibSrc),
+    concat('lib.min.js'),
+    gulp.dest(paths.src)
+  ],
+  cb
+);
+}
 
 // minify & concat custom js - PRODUCTION
-gulp.task('scripts-production', (cb) => {
+function scriptsProduction(cb) {
   pump([
-      gulp.src(paths.scripts),
-      concat('all.min.js'),
-      uglifyjs(),
-      gulp.dest(paths.src)
-    ],
-    cb
-  );
-});
+    gulp.src(paths.scripts),
+    concat('all.min.js'),
+    uglifyjs(),
+    gulp.dest(paths.src)
+  ],
+  cb
+);
+}
 
 //compile sass - PRODUCTION
-gulp.task('sass-production', () => {
+function sassProduction(cb) {
   gulp.src(paths.sassSrc)
     .pipe(autoprefixer())
     .pipe(sass({
@@ -118,20 +119,20 @@ gulp.task('sass-production', () => {
     }).on('error', sass.logError))
     .pipe(concat('style.css'))
     .pipe(gulp.dest(paths.src));
-});
+  cb();
+}
 
-//define watch gulp task
-gulp.task('watch', () => {
+//setup watch gulp task
+function watch() {
   //live reloader
   livereload.listen();
   //watch for changes in js
-  gulp.watch(paths.scripts, ['scripts-development']);
+  gulp.watch(paths.scripts, scriptsDevelopment);
   //watch for changes in sass
-  gulp.watch(paths.sass, ['sass-development']);
-});
+  gulp.watch(paths.sass, sassDevelopment);
+}
 
-//define default gulp task
-gulp.task('default', ['libraries-css-development', 'libraries-js-development', 'scripts-development', 'sass-development']);
-
-//define production gulp task
-gulp.task('production', ['libraries-css-production', 'libraries-js-production', 'scripts-production', 'sass-production']);
+//assign to gulp tasks
+gulp.task('default', gulp.series(librariesCssDevelopment, librariesJsDevelopment, scriptsDevelopment, sassDevelopment));
+gulp.task('production', gulp.series(librariesCssProduction, librariesJsProduction, scriptsProduction, sassProduction));
+gulp.task('watch', gulp.series(watch));
