@@ -12,15 +12,15 @@ Base Template for a Node.JS project.
 
 ### Dev Dependencies used:
 * Gulp.JS v4
- ### ... using the following Gulp Modules
+ ### ... using the following Dev Modules
  * autoprefixer
- * concat
- * livereload
- * pump
- * sass
- * sourcemaps
- * uglify
- * uglifyjs
+ * browser-sync
+ * cssnano
+ * gulp-babel
+ * gulp-concat
+ * gulp-postcss
+ * gulp-sass
+ * gulp-sourcemaps
 
 ### Libraries included:
 * Bootstrap v4.2.1 (Only grid system and flex utilities)
