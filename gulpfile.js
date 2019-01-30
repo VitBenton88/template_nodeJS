@@ -84,6 +84,7 @@ function develop_scripts() {
        .pipe(concat('scripts.js'))
        .pipe(sourcemaps.write('/'))
        .pipe(gulp.dest(paths.destination))
+       .pipe(browserSync.stream())
    );
 }
 
@@ -169,7 +170,8 @@ function reload() {
 
 function sync() {
    browserSync.init({
-      //  proxy: 'friedas.test:8888/'
+        proxy: "http://localhost:3000",
+        files: paths.styles.source
    });
 
    gulp.watch(paths.scripts.source.custom, develop_scripts);
