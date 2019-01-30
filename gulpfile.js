@@ -1,138 +1,178 @@
-//modules
-const gulp = require('gulp');
-const uglify = require('gulp-uglify');
-const uglifyjs = require('gulp-uglify-es').default;
+/**
+* MODULES
+**/
+
+const autoprefixer = require('autoprefixer');
+const babel = require('gulp-babel');
+const browserSync = require('browser-sync').create();
+const cssnano = require('cssnano');
 const concat = require('gulp-concat');
-const pump = require('pump');
+const gulp = require('gulp');
+const postcss = require('gulp-postcss');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
-const autoprefixer = require('gulp-autoprefixer');
-const livereload = require('gulp-livereload');
 
-//paths
 const paths = {
-  cssLibSrc: 'src/libs/**/*.css',
-  jsLibSrc: 'src/libs/**/*.js',
-  root: '/',
-  src: 'public/assets',
-  scripts: 'src/js/*.js',
-  sass: 'src/sass/**/*.scss',
-  sassSrc: 'src/sass/style.scss'
+   styles: {
+       browsers: [
+           'last 1 Edge version',
+           'last 1 iOS version',
+           'last 1 Safari version',
+           'last 1 Samsung version',
+
+           'last 1 Chrome version',
+           'last 1 ChromeAndroid version',
+
+           'last 1 Firefox version',
+           'last 1 FirefoxAndroid version',
+
+           'last 1 Opera version',
+           'last 1 OperaMobile version'
+       ],
+
+       source: 'source/sass/style.scss'
+   },
+
+   scripts: {
+       source: {
+           custom: 'source/scripts/**/*.js',
+
+           libraries: [
+               'source/libraries/jquery-3.3.1.min.js',
+               'source/libraries/cssua.min.js'
+           ]
+       }
+   },
+
+   html: {
+       source: '*.html'
+   },
+
+   destination: 'public/assets'
 };
 
-//// DEVELOPMENT gulp.tasks ////
+/**
+* EXPORTS
+**/
 
-// combine css libraries - DEVELOPMENT
-function librariesCssDevelopment(cb) {
-  pump([
-    gulp.src(paths.jsLibSrc),
-    sourcemaps.init(),
-    concat('lib.min.js'),
-    sourcemaps.write(paths.root),
-    gulp.dest(paths.src)
-  ],
-  cb()
-  );
+exports.develop_scripts = develop_scripts;
+exports.develop_styles = develop_styles;
+exports.develop = develop;
+exports.production_scripts = production_scripts;
+exports.production_styles = production_styles;
+exports.production = production;
+exports.sync = sync;
+
+/**
+* FUNCTIONS
+**/
+
+function develop_scripts() {
+   return (
+       //concat javascript libraries
+       gulp
+       .src(paths.scripts.source.libraries)
+       .pipe(sourcemaps.init())
+       .pipe(concat('libraries.js'))
+       .pipe(sourcemaps.write('/'))
+       .pipe(gulp.dest(paths.destination)),
+
+       //concat custom javascript
+       gulp
+       .src(paths.scripts.source.custom)
+       .pipe(sourcemaps.init())
+       .pipe(concat('scripts.js'))
+       .pipe(sourcemaps.write('/'))
+       .pipe(gulp.dest(paths.destination))
+   );
 }
 
-// combine js libraries - DEVELOPMENT
-function librariesJsDevelopment(cb) {
-  pump([
-    gulp.src(paths.jsLibSrc),
-    sourcemaps.init(),
-    concat('lib.min.js'),
-    sourcemaps.write(paths.root),
-    gulp.dest(paths.src)
-  ],
-  cb()
-  );
+function develop_styles() {
+   return (
+       //compile and minify sass
+       gulp
+       .src(paths.styles.source)
+       .pipe(sourcemaps.init())
+       .pipe(sass())
+       .on('error', sass.logError)
+
+       .pipe(postcss([
+           autoprefixer({
+               browsers: paths.styles.browsers
+           }),
+
+           cssnano()
+       ]))
+
+       .pipe(sourcemaps.write('/'))
+       .pipe(gulp.dest(paths.destination))
+       .pipe(browserSync.stream())
+   );
 }
 
-// concat custom js - DEVELOPMENT
-function scriptsDevelopment(cb) {
-  pump([
-    gulp.src(paths.scripts),
-    sourcemaps.init(),
-    concat('all.min.js'),
-    sourcemaps.write(paths.root),
-    gulp.dest(paths.src)
-  ],
-  cb
-  );
+function develop() {
+   return (
+       develop_scripts(),
+       develop_styles()
+   );
 }
 
-//compile sass - DEVELOPMENT
-function sassDevelopment(cb) {
-  gulp.src(paths.sassSrc)
-    .pipe(sourcemaps.init())
-    .pipe(autoprefixer())
-    .pipe(sass().on('error', sass.logError))
-    .pipe(concat('style.css'))
-    .pipe(sourcemaps.write(paths.root))
-    .pipe(gulp.dest(paths.src))
-    .pipe(livereload());
-  cb();
+function production_scripts() {
+   return (
+       //concat javascript libraries
+       gulp
+       .src(paths.scripts.source.libraries)
+       .pipe(concat('libraries.js'))
+       .pipe(gulp.dest(paths.destination)),
+
+       //concat & minify custom javascript
+       gulp
+       .src(paths.scripts.source.custom)
+       .pipe(concat('scripts.js'))
+       .pipe(babel({
+          presets: ['@babel/env']
+        }))
+       .pipe(gulp.dest(paths.destination))
+   );
 }
 
-//// PRODUCTION gulp.tasks/ ////
+function production_styles() {
+   return (
+       //compile and minify sass
+       gulp
+       .src(paths.styles.source)
+       .pipe(sass())
+       .on('error', sass.logError)
 
-// combine css libraries - PRODUCTION
-function librariesCssProduction(cb) {
-  pump([
-    gulp.src(paths.cssLibSrc),
-    concat('lib.min.css'),
-    gulp.dest(paths.src)
-  ],
-  cb
-);
+       .pipe(postcss([
+           autoprefixer({
+               browsers: paths.styles.browsers
+           }),
+
+           cssnano()
+       ]))
+
+       .pipe(gulp.dest(paths.destination))
+   );
 }
 
-// combine js libraries - PRODUCTION
-function librariesJsProduction(cb) {
-  pump([
-    gulp.src(paths.jsLibSrc),
-    concat('lib.min.js'),
-    gulp.dest(paths.src)
-  ],
-  cb
-);
+function production() {
+   return (
+       production_scripts(),
+       production_styles()
+   );
 }
 
-// minify & concat custom js - PRODUCTION
-function scriptsProduction(cb) {
-  pump([
-    gulp.src(paths.scripts),
-    concat('all.min.js'),
-    uglifyjs(),
-    gulp.dest(paths.src)
-  ],
-  cb
-);
+function reload() {
+   browserSync.reload();
 }
 
-//compile sass - PRODUCTION
-function sassProduction(cb) {
-  gulp.src(paths.sassSrc)
-    .pipe(autoprefixer())
-    .pipe(sass({
-      outputStyle: 'compressed'
-    }).on('error', sass.logError))
-    .pipe(concat('style.css'))
-    .pipe(gulp.dest(paths.src));
-  cb();
-}
+function sync() {
+   browserSync.init({
+      //  proxy: 'friedas.test:8888/'
+   });
 
-//setup watch gulp task
-function watch() {
-  //live reloader
-  livereload.listen();
-  //watch for changes in js
-  gulp.watch(paths.scripts, scriptsDevelopment);
-  //watch for changes in sass
-  gulp.watch(paths.sass, sassDevelopment);
+   gulp.watch(paths.scripts.source.custom, develop_scripts);
+   gulp.watch(paths.styles.source, develop_styles);
+   gulp.watch(paths.html.source, reload);
 }
-
-//assign to gulp tasks
-gulp.task('default', gulp.series(librariesCssDevelopment, librariesJsDevelopment, scriptsDevelopment, sassDevelopment));
-gulp.task('production', gulp.series(librariesCssProduction, librariesJsProduction, scriptsProduction, sassProduction));
-gulp.task('watch', gulp.series(watch));
