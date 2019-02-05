@@ -11,6 +11,7 @@ const gulp = require('gulp');
 const postcss = require('gulp-postcss');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
+const uglify = require('gulp-uglify');
 
 const paths = {
    styles: {
@@ -133,6 +134,7 @@ function production_scripts() {
        .pipe(babel({
           presets: ['@babel/env']
         }))
+        .pipe(uglify())
        .pipe(gulp.dest(paths.destination))
    );
 }
